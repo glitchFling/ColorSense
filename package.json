@@ -1,0 +1,9 @@
+{
+  "name": "colorsense",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@faker-js/faker": "^9.0.0",
+    "uniqolor": "^1.1.0"
+  }
+}
