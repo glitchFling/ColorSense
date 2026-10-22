@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 source ./colorsense.sh
-ECHO TEST 1: Basic Color
+echo TEST 1: Basic Color
 colorsense color red "nullscape"
 echo
 colorsense color "#000000" "sup"
