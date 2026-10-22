@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 source ./colorsense.sh
+source ./poweronn.sh
 
 echo "TEST 1: Basic Color"
 colorsense color red "nullscape"
@@ -45,18 +46,18 @@ colorsense detect blue
 echo
 
 echo "TEST 10: PowerOnn - word present"
-colorsense poweronn "the quick brown fox" "brown"
+poweronn "the quick brown fox" "brown"
 echo
 
 echo "TEST 11: PowerOnn - word absent"
-colorsense poweronn "the quick brown fox" "cat"
+poweronn "the quick brown fox" "cat"
 echo
 
 echo "TEST 12: PowerOnn - case-insensitive"
-colorsense poweronn "The Quick Brown Fox" "quick"
+poweronn "The Quick Brown Fox" "quick"
 echo
 
 echo "TEST 13: PowerOnn with faker text"
 ABSENT_TEXT=$(node -e "const { faker } = require('@faker-js/faker'); console.log(faker.word.words(3));")
-colorsense poweronn "$ABSENT_TEXT" "zzzznotfoundzzzz"
+poweronn "$ABSENT_TEXT" "zzzznotfoundzzzz"
 echo

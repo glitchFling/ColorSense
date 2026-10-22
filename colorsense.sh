@@ -133,19 +133,6 @@ get_named_rgb() {
         *)       echo "0;0;0" ;;
     esac
 }
-poweronn_command() {
-    local text="$1"
-    local word="$2"
-    local word_lower="${word,,}"
-    local text_lower="${text,,}"
-    if [[ "$text_lower" == *"$word_lower"* ]]; then
-        echo "PowerOnn: word \"$word\" IS present in the text."
-        return 0
-    else
-        echo "PowerOnn: word \"$word\" is ABSENT from the text."
-        return 1
-    fi
-}
 colorsense() {
     case "$1" in
         color)
@@ -157,11 +144,8 @@ colorsense() {
         detect)
             detect_command "$2"
             ;;
-        poweronn)
-            poweronn_command "$2" "$3"
-            ;;
         *)
-            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text> | colorsense detect <color> | colorsense poweronn <text> <word>"
+            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text> | colorsense detect <color>"
             ;;
     esac
 }
