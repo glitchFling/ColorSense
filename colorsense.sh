@@ -133,25 +133,6 @@ get_named_rgb() {
         *)       echo "0;0;0" ;;
     esac
 }
-ai_command() {
-    local prompt="$*"
-    if [ -z "$prompt" ]; then
-        echo "Usage: colorsense ai <natural language instruction>"
-        echo "Examples:"
-        echo "  colorsense ai color blue hello"
-        echo "  colorsense ai gradient from red to green \"my text\""
-        echo "  colorsense ai detect #ff0000"
-        echo "  colorsense ai is cat absent from \"the dog sat\""
-        return 1
-    fi
-    local cmd
-    cmd=$(node "$(dirname "${BASH_SOURCE[0]}")/ai-sense.mjs" "$prompt" 2>&1)
-    if [ $? -ne 0 ]; then
-        echo "$cmd"
-        return 1
-    fi
-    eval "$cmd"
-}
 colorsense() {
     case "$1" in
         color)
@@ -163,12 +144,8 @@ colorsense() {
         detect)
             detect_command "$2"
             ;;
-        ai)
-            shift
-            ai_command "$@"
-            ;;
         *)
-            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text> | colorsense detect <color> | colorsense ai <prompt>"
+            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text> | colorsense detect <color>"
             ;;
     esac
 }
