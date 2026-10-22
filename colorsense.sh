@@ -76,6 +76,76 @@ gradient_command() {
     done
     echo -ne "\e[0m"
 }
+detect_command() {
+    local color_val="$1"
+    if [[ "$color_val" =~ ^#[0-9a-fA-F]{6}$ ]]; then
+        local rgb=$(hex_to_rgb "$color_val")
+        IFS=';' read -r r g b <<< "$rgb"
+        local brightness=$(( (r * 299 + g * 587 + b * 114) / 1000 ))
+        local tone="dark"
+        if [ "$brightness" -gt 128 ]; then
+            tone="light"
+        fi
+        echo "Detected hex color: $color_val"
+        echo "  RGB: $r, $g, $b"
+        echo "  Brightness: $brightness/255 ($tone)"
+        local nearest_name="unknown"
+        local nearest_dist=999999
+        local name
+        local nr ng nb
+        for name in black red green yellow blue magenta cyan white; do
+            IFS=';' read -r nr ng nb <<< "$(get_named_rgb "$name")"
+            local dist=$(( (r - nr) * (r - nr) + (g - ng) * (g - ng) + (b - nb) * (b - nb) ))
+            if [ "$dist" -lt "$nearest_dist" ]; then
+                nearest_dist="$dist"
+                nearest_name="$name"
+            fi
+        done
+        echo "  Nearest named color: $nearest_name"
+        colorsense color "$color_val" "sample"
+        echo
+    else
+        local code=$(get_color_code "$color_val")
+        if [ -n "$code" ]; then
+            echo "Detected named color: ${color_val,,} (ANSI code $code)"
+            local rgb_vals=$(get_named_rgb "${color_val,,}")
+            IFS=';' read -r r g b <<< "$rgb_vals"
+            echo "  RGB: $r, $g, $b"
+            colorsense color "$color_val" "sample"
+            echo
+        else
+            echo "Unknown color: $color_val"
+            echo "Supported names: black red green yellow blue magenta cyan white"
+            echo "Or use hex format: #RRGGBB"
+        fi
+    fi
+}
+get_named_rgb() {
+    case "${1,,}" in
+        black)   echo "0;0;0" ;;
+        red)     echo "255;0;0" ;;
+        green)   echo "0;255;0" ;;
+        yellow)  echo "255;255;0" ;;
+        blue)    echo "0;0;255" ;;
+        magenta) echo "255;0;255" ;;
+        cyan)    echo "0;255;255" ;;
+        white)   echo "255;255;255" ;;
+        *)       echo "0;0;0" ;;
+    esac
+}
+poweronn_command() {
+    local text="$1"
+    local word="$2"
+    local word_lower="${word,,}"
+    local text_lower="${text,,}"
+    if [[ "$text_lower" == *"$word_lower"* ]]; then
+        echo "PowerOnn: word \"$word\" IS present in the text."
+        return 0
+    else
+        echo "PowerOnn: word \"$word\" is ABSENT from the text."
+        return 1
+    fi
+}
 colorsense() {
     case "$1" in
         color)
@@ -84,8 +154,14 @@ colorsense() {
         gradient)
             gradient_command "$2" "$3" "$4"
             ;;
+        detect)
+            detect_command "$2"
+            ;;
+        poweronn)
+            poweronn_command "$2" "$3"
+            ;;
         *)
-            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text>"
+            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text> | colorsense detect <color> | colorsense poweronn <text> <word>"
             ;;
     esac
 }

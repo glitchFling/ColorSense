@@ -35,3 +35,28 @@ COLOR_B=$(node -e "const { faker } = require('@faker-js/faker'); console.log(fak
 GRADIENT_TEXT=$(node -e "const { faker } = require('@faker-js/faker'); console.log(faker.word.words(3));")
 colorsense gradient "-$COLOR_A" "--$COLOR_B" "$GRADIENT_TEXT"
 echo
+
+echo "TEST 8: Detect hex color"
+colorsense detect "#00764d"
+echo
+
+echo "TEST 9: Detect named color"
+colorsense detect blue
+echo
+
+echo "TEST 10: PowerOnn - word present"
+colorsense poweronn "the quick brown fox" "brown"
+echo
+
+echo "TEST 11: PowerOnn - word absent"
+colorsense poweronn "the quick brown fox" "cat"
+echo
+
+echo "TEST 12: PowerOnn - case-insensitive"
+colorsense poweronn "The Quick Brown Fox" "quick"
+echo
+
+echo "TEST 13: PowerOnn with faker text"
+ABSENT_TEXT=$(node -e "const { faker } = require('@faker-js/faker'); console.log(faker.word.words(3));")
+colorsense poweronn "$ABSENT_TEXT" "zzzznotfoundzzzz"
+echo
