@@ -76,14 +76,20 @@ gradient_command() {
     done
     echo -ne "\e[0m"
 }
-case "$1" in
-    color)
-        color_command "$2" "$3"
-        ;;
-    gradient)
-        gradient_command "$2" "$3" "$4"
-        ;;
-    *)
-        echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text>"
-        ;;
-esac
+colorsense() {
+    case "$1" in
+        color)
+            color_command "$2" "$3"
+            ;;
+        gradient)
+            gradient_command "$2" "$3" "$4"
+            ;;
+        *)
+            echo "Usage: colorsense color <color> <text> | colorsense gradient <start> <end> <text>"
+            ;;
+    esac
+}
+
+if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
+    colorsense "$@"
+fi
