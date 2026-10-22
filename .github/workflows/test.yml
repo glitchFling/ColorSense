@@ -13,5 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Install Dependancies
+        runs: |
+          npm install @faker-js/faker
+          npm install uniqolor
+
       - name: Run ColorSense test
         run: bash test.sh
