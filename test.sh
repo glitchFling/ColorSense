@@ -25,3 +25,11 @@ echo "TEST 10: PowerOnn - word present"; poweronn "the quick brown fox" "brown";
 echo "TEST 11: PowerOnn - word absent"; poweronn "the quick brown fox" "cat"; echo
 echo "TEST 12: PowerOnn - case-insensitive"; poweronn "The Quick Brown Fox" "quick"; echo
 echo "TEST 13: PowerOnn with faker text"; poweronn "$(faker "word.words(3)")" "zzzznotfoundzzzz"; echo
+
+echo "TEST 14: AI - color from natural language"; colorsense ai color blue hello; echo
+echo "TEST 15: AI - gradient from natural language"; colorsense ai gradient from red to green "my text"; echo
+echo "TEST 16: AI - detect from natural language"; colorsense ai detect "#ff0000"; echo
+echo "TEST 17: AI - poweronn absent from natural language"; colorsense ai is cat absent from '"the dog sat"'; echo
+echo "TEST 18: AI - fuzzy color name (salmon)"; colorsense ai color salmon "hello"; echo
+echo "TEST 19: AI - two-word color (dark blue)"; colorsense ai color dark blue "hello"; echo
+echo "TEST 20: AI - unknown intent fallback"; colorsense ai "xyzzy nonsense"; echo
