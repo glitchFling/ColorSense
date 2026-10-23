@@ -18,6 +18,47 @@ get_color_code() {
         *)       echo "" ;;
     esac
 }
+# Map extended color names to hex codes for TrueColor output
+get_color_hex() {
+    case "${1,,}" in
+        crimson)   echo "#dc143c" ;;
+        scarlet)   echo "#ff2400" ;;
+        ruby)      echo "#9b111e" ;;
+        red)       echo "#ff0000" ;;
+        orange)    echo "#ffa500" ;;
+        amber)     echo "#ffbf00" ;;
+        gold)      echo "#ffd700" ;;
+        yellow)    echo "#ffff00" ;;
+        lime)      echo "#00ff00" ;;
+        green)     echo "#008000" ;;
+        emerald)   echo "#50c878" ;;
+        teal)      echo "#008080" ;;
+        cyan)      echo "#00ffff" ;;
+        skyblue)   echo "#87ceeb" ;;
+        azure)     echo "#007fff" ;;
+        blue)      echo "#0000ff" ;;
+        navy)      echo "#000080" ;;
+        indigo)    echo "#4b0082" ;;
+        lavender)  echo "#e6e6fa" ;;
+        purple)    echo "#800080" ;;
+        violet)    echo "#ee82ee" ;;
+        magenta)   echo "#ff00ff" ;;
+        pink)      echo "#ffc0cb" ;;
+        rose)      echo "#ff007f" ;;
+        coral)     echo "#ff7f50" ;;
+        salmon)    echo "#fa8072" ;;
+        beige)     echo "#f5f5dc" ;;
+        brown)     echo "#a52a2a" ;;
+        bronze)    echo "#cd7f32" ;;
+        silver)    echo "#c0c0c0" ;;
+        white)     echo "#ffffff" ;;
+        ivory)     echo "#fffff0" ;;
+        grey)      echo "#808080" ;;
+        charcoal)  echo "#36454f" ;;
+        black)     echo "#000000" ;;
+        *)         echo "" ;;
+    esac
+}
 color_command() {
     local color_val="$1"
     local text="$2"
@@ -32,7 +73,13 @@ color_command() {
         if [ -n "$code" ]; then
             echo -ne "\e[${code}m${text}\e[0m"
         else
-            echo -ne "$text"
+            local hex=$(get_color_hex "$color_val")
+            if [ -n "$hex" ]; then
+                local rgb=$(hex_to_rgb "$hex")
+                echo -ne "\e[38;2;${rgb}m${text}\e[0m"
+            else
+                echo -ne "$text"
+            fi
         fi
     fi
 }
