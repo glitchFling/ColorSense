@@ -4,21 +4,7 @@ hex_to_rgb() {
     local hex=${1#\#}
     printf "%d;%d;%d" "0x${hex:0:2}" "0x${hex:2:2}" "0x${hex:4:2}"
 }
-# Helper function to map basic color names to ANSI codes
-get_color_code() {
-    case "${1,,}" in
-        black)   echo "30" ;;
-        red)     echo "31" ;;
-        green)   echo "32" ;;
-        yellow)  echo "33" ;;
-        blue)    echo "34" ;;
-        magenta) echo "35" ;;
-        cyan)    echo "36" ;;
-        white)   echo "37" ;;
-        *)       echo "" ;;
-    esac
-}
-# Map extended color names to hex codes for TrueColor output
+# Map color names to hex codes for TrueColor output
 get_color_hex() {
     case "${1,,}" in
         crimson)   echo "#dc143c" ;;
@@ -68,18 +54,12 @@ color_command() {
         local rgb=$(hex_to_rgb "$color_val")
         echo -ne "\e[38;2;${rgb}m${text}\e[0m"
     else
-        # Basic ANSI
-        local code=$(get_color_code "$color_val")
-        if [ -n "$code" ]; then
-            echo -ne "\e[${code}m${text}\e[0m"
+        local hex=$(get_color_hex "$color_val")
+        if [ -n "$hex" ]; then
+            local rgb=$(hex_to_rgb "$hex")
+            echo -ne "\e[38;2;${rgb}m${text}\e[0m"
         else
-            local hex=$(get_color_hex "$color_val")
-            if [ -n "$hex" ]; then
-                local rgb=$(hex_to_rgb "$hex")
-                echo -ne "\e[38;2;${rgb}m${text}\e[0m"
-            else
-                echo -ne "$text"
-            fi
+            echo -ne "$text"
         fi
     fi
 }
@@ -152,33 +132,29 @@ detect_command() {
         colorsense color "$color_val" "sample"
         echo
     else
-        local code=$(get_color_code "$color_val")
-        if [ -n "$code" ]; then
-            echo "Detected named color: ${color_val,,} (ANSI code $code)"
-            local rgb_vals=$(get_named_rgb "${color_val,,}")
+        local hex=$(get_color_hex "$color_val")
+        if [ -n "$hex" ]; then
+            local rgb_vals=$(hex_to_rgb "$hex")
             IFS=';' read -r r g b <<< "$rgb_vals"
+            echo "Detected named color: ${color_val,,}"
+            echo "  Hex: $hex"
             echo "  RGB: $r, $g, $b"
             colorsense color "$color_val" "sample"
             echo
         else
             echo "Unknown color: $color_val"
-            echo "Supported names: black red green yellow blue magenta cyan white"
+            echo "Supported names: crimson scarlet ruby red orange amber gold yellow lime green emerald teal cyan skyblue azure blue navy indigo lavender purple violet magenta pink rose coral salmon beige brown bronze silver white ivory grey charcoal black"
             echo "Or use hex format: #RRGGBB"
         fi
     fi
 }
 get_named_rgb() {
-    case "${1,,}" in
-        black)   echo "0;0;0" ;;
-        red)     echo "255;0;0" ;;
-        green)   echo "0;255;0" ;;
-        yellow)  echo "255;255;0" ;;
-        blue)    echo "0;0;255" ;;
-        magenta) echo "255;0;255" ;;
-        cyan)    echo "0;255;255" ;;
-        white)   echo "255;255;255" ;;
-        *)       echo "0;0;0" ;;
-    esac
+    local hex=$(get_color_hex "$1")
+    if [ -n "$hex" ]; then
+        hex_to_rgb "$hex"
+    else
+        echo "0;0;0"
+    fi
 }
 colorsense() {
     case "$1" in
