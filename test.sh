@@ -4,16 +4,16 @@ source ./poweronn.sh
 
 # Color name Generator
 random_color() {
-    # A comprehensive list of clean, classic color names
+    # All names are lowercase and space-free for stable CLI utility parsing
     local color_names=(
-        "Crimson" "Scarlet" "Ruby" "Red" "Orange" "Amber" "Gold" "Yellow" 
-        "Lime" "Green" "Emerald" "Teal" "Cyan" "Sky Blue" "Azure" "Blue" 
-        "Navy" "Indigo" "Lavender" "Purple" "Violet" "Magenta" "Pink" 
-        "Rose" "Coral" "Salmon" "Beige" "Brown" "Bronze" "Silver" 
-        "White" "Ivory" "Grey" "Charcoal" "Black"
+        "crimson" "scarlet" "ruby" "red" "orange" "amber" "gold" "yellow" 
+        "lime" "green" "emerald" "teal" "cyan" "skyblue" "azure" "blue" 
+        "navy" "indigo" "lavender" "purple" "violet" "magenta" "pink" 
+        "rose" "coral" "salmon" "beige" "brown" "bronze" "silver" 
+        "white" "ivory" "grey" "charcoal" "black"
     )
 
-    # Select and print a random index from the array
+    # Select and print a random index from the array safely
     echo "${color_names[$RANDOM % ${#color_names[@]}]}"
 }
 
@@ -22,5 +22,15 @@ uniqolor() { node -e "const uniqolor = require('uniqolor'); console.log(uniqolor
 
 echo "TEST 1: Basic Colors"
 for i in {1..5}; do
-  colorsense color "$(random_color)" "nullscape"; echo
+  # 1. Grab a single random color name and store it
+  chosen=$(random_color)
+  
+  # 2. Print the plain-text color label on the left with uniform spacing
+  printf "%-12s -> " "[$chosen]"
+  
+  # 3. Process the stylized token immediately on the right of the label
+  colorsense color "$chosen" "nullscape"
+  
+  # 4. Finish the line cleanly
+  echo
 done
