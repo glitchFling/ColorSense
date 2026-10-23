@@ -23,9 +23,9 @@ get_color_hex() {
     case "${1,,}" in
         crimson)   echo "#dc143c" ;;
         scarlet)   echo "#ff2400" ;;
-        ruby)      echo "#9b111e" ;;
+        ruby)      echo "#e0115f" ;;
         red)       echo "#ff0000" ;;
-        orange)    echo "#ffa500" ;;
+        orange)    echo "#ff7f00" ;;
         amber)     echo "#ffbf00" ;;
         gold)      echo "#ffd700" ;;
         yellow)    echo "#ffff00" ;;
@@ -41,14 +41,14 @@ get_color_hex() {
         indigo)    echo "#4b0082" ;;
         lavender)  echo "#e6e6fa" ;;
         purple)    echo "#800080" ;;
-        violet)    echo "#ee82ee" ;;
+        violet)    echo "#8f00ff" ;;
         magenta)   echo "#ff00ff" ;;
         pink)      echo "#ffc0cb" ;;
         rose)      echo "#ff007f" ;;
         coral)     echo "#ff7f50" ;;
         salmon)    echo "#fa8072" ;;
         beige)     echo "#f5f5dc" ;;
-        brown)     echo "#a52a2a" ;;
+        brown)     echo "#8b4513" ;;
         bronze)    echo "#cd7f32" ;;
         silver)    echo "#c0c0c0" ;;
         white)     echo "#ffffff" ;;
