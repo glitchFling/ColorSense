@@ -2,6 +2,7 @@
 source ./colorsense.sh
 source ./poweronn.sh
 
+# Define the comprehensive color list globally
 color_names=(
     "crimson" "scarlet" "ruby" "red" "orange" "amber" "gold" "yellow" 
     "lime" "green" "emerald" "teal" "cyan" "skyblue" "azure" "blue" 
@@ -18,15 +19,18 @@ random_color() {
 faker() { node -e "const { faker } = require('@faker-js/faker'); console.log(faker.$1);"; }
 uniqolor() { node -e "const uniqolor = require('uniqolor'); console.log(uniqolor('$1').color);"; }
 
-echo "TEST 1: All Listed Colors"
+echo "TEST 1: All Listed Colors with Hex Codes"
 # Loop sequentially through every item in the color_names array
 for chosen in "${color_names[@]}"; do
-  # 1. Print the plain-text color label on the left with uniform spacing
-  printf "%-12s -> " "[$chosen]"
+  # 1. Fetch the exact Hex code dynamically using your uniqolor setup
+  hex_code=$(uniqolor "$chosen")
   
-  # 2. Process the stylized token immediately on the right of the label
+  # 2. Print the formatted markdown-style label on the left with padding
+  printf "%-25s -> " "[$chosen]($hex_code)"
+  
+  # 3. Process the stylized token immediately on the right of the label
   colorsense color "$chosen" "nullscape"
   
-  # 3. Finish the line cleanly
+  # 4. Finish the line cleanly
   echo
 done
