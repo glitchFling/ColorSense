@@ -22,5 +22,5 @@ uniqolor() { node -e "const uniqolor = require('uniqolor'); console.log(uniqolor
 
 echo "TEST 1: Basic Colors"
 for i in {1..5}; do
-  colorsense color ${colors[$RANDOM % ${#colors[@]}]} "nullscape"; echo
+  colorsense color "$(random_color)" "nullscape"; echo
 done
