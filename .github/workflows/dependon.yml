@@ -1,8 +1,9 @@
 name: Dependabot Audit Fixer
 
 on:
+  workflow_dispatch: 
   pull_request:
-    types: [opened, synchronized]
+    types: [opened, synchronize]
 
 permissions:
   contents: write
