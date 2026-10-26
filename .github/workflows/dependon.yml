@@ -1,0 +1,47 @@
+name: Dependabot Audit Fixer
+
+on:
+  pull_request:
+    types: [opened, synchronized]
+
+permissions:
+  contents: write
+
+jobs:
+  audit-fix:
+    name: Auto Patch Vulnerabilities
+    # Only run this workflow on pull requests opened by dependabot
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Dependabot Branch
+        uses: actions/checkout@v7
+        with:
+          # Check out using the specific PR head branch to allow committing back
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Node.js Runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+          cache: 'npm'
+
+      - name: Run Safe Vulnerability Patching
+        run: |
+          echo "Running automated non-breaking security patches..."
+          npm audit fix
+
+      - name: Commit and Push Updated Lockfile
+        run: |
+          # Only proceed if npm audit fix actually modified the lockfile
+          if [[ -n "$(git status --porcelain package-lock.json)" ]]; then
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@://github.com"
+            
+            git add package-lock.json
+            git commit -m "chore(deps): automated npm audit fix for vulnerabilities"
+            git push
+          else
+            echo "No safe non-breaking vulnerabilities could be patched automatically."
+          fi
