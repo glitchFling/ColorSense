@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "@faker-js/faker": "^9.0.0",
+    "@faker-js/faker": "^10.6.0",
     "gh": "^2.8.9",
     "uniqolor": "^1.1.0"
   }
